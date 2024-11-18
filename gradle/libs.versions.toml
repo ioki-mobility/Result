@@ -1,0 +1,10 @@
+[versions]
+kotlinVersion = "2.0.21"
+
+[libraries]
+test-junit = "junit:junit:4.13.2"
+test-strikt = "io.strikt:strikt-core:0.35.1"
+
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin", version.ref = "kotlinVersion" }
