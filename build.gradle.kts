@@ -1,7 +1,12 @@
 plugins {
-    kotlin("jvm") version libs.versions.kotlinVersion
+    alias(libs.plugins.kotlin)
     `maven-publish`
     signing
+}
+
+repositories {
+    mavenCentral()
+    google()
 }
 
 kotlin {

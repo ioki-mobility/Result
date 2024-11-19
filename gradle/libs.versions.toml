@@ -7,4 +7,4 @@ test-strikt = "io.strikt:strikt-core:0.35.1"
 
 
 [plugins]
-kotlin = { id = "org.jetbrains.kotlin", version.ref = "kotlinVersion" }
+kotlin = "org.jetbrains.kotlin.jvm:2.0.21"
