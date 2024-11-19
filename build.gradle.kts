@@ -15,6 +15,10 @@ kotlin {
     jvmToolchain(17)
 }
 
+java {
+    withSourcesJar()
+}
+
 dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.strikt)
@@ -34,6 +38,7 @@ publishing {
             groupId = "com.ioki.result"
             artifactId = "result"
             version = "0.0.1-SNAPSHOT"
+            from(components["java"])
 
             pom {
                 name.set("Result")
