@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin)
+    alias(libs.plugins.dokka)
     `maven-publish`
     signing
 }
@@ -19,9 +20,17 @@ dependencies {
     testImplementation(libs.test.strikt)
 }
 
+val dokkaJar = tasks.register<Jar>("dokkaJar") {
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
+}
+
 publishing {
     publications {
         register<MavenPublication>("release") {
+            artifact(dokkaJar)
+
             groupId = "com.ioki.result"
             artifactId = "result"
             version = "0.0.1-SNAPSHOT"
@@ -55,9 +64,6 @@ publishing {
                     developerConnection.set("scm:git:ssh://git@github.com:ioki-mobility/Result.git")
                 }
             }
-            afterEvaluate {
-//                from(components["release"])
-            }
         }
     }
     repositories {
@@ -78,9 +84,10 @@ publishing {
     }
 }
 
-//signing {
-//    val signingKey = System.getenv("GPG_SIGNING_KEY")
-//    val signingPassword = System.getenv("GPG_SIGNING_PASSWORD")
-//    useInMemoryPgpKeys(signingKey, signingPassword)
-//    sign(publishing.publications)
-//}
+signing {
+    val signingKey = System.getenv("GPG_SIGNING_KEY")
+    val signingPassword = System.getenv("GPG_SIGNING_PASSWORD")
+    isRequired = hasProperty("GPG_SIGNING_REQUIRED")
+    if (isRequired) useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications)
+}

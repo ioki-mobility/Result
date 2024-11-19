@@ -3,6 +3,8 @@
 /.idea
 /captures
 
+/.kotlin
+
 # Gradle
 /.gradle
 /local.properties
