@@ -1,6 +1,14 @@
 plugins {
+    kotlin("jvm") version libs.versions.kotlinVersion
+    `maven-publish`
+    signing
 }
 
-subprojects {
-    version = "1.0.0"
+kotlin {
+    jvmToolchain(17)
+}
+
+dependencies {
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.strikt)
 }
