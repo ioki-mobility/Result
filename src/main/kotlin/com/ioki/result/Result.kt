@@ -1,4 +1,4 @@
-package com.ioki.lib.result
+package com.ioki.result
 
 public sealed interface Result<out T, out E> {
     public data class Success<T>(val data: T) : Result<T, Nothing>

@@ -1,4 +1,4 @@
-package com.ioki.lib.result
+package com.ioki.result
 
 public fun <T> T.toSuccess(): Result.Success<T> = Result.Success(this)
 public fun <E> E.toFailure(): Result.Failure<E> = Result.Failure(this)

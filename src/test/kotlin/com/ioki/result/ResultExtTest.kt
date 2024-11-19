@@ -1,4 +1,4 @@
-package com.ioki.lib.result
+package com.ioki.result
 
 import org.junit.Test
 import strikt.api.expectThat
