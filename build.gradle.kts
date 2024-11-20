@@ -37,7 +37,7 @@ publishing {
 
             groupId = "com.ioki.result"
             artifactId = "result"
-            version = "0.0.1-SNAPSHOT"
+            version = "0.1.0"
             from(components["java"])
 
             pom {
