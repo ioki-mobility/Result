@@ -12,11 +12,15 @@ env:
   SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
 jobs:
+  ci:
+    uses: ./.github/workflows/test-lib.yml
+
   publish:
     runs-on: ubuntu-latest
+    needs: ci
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Publish to Sonatype Staging
-        run: ./gradlew publishAllPublicationsToSonatypeStagingRepository -PGPG_SIGNING_REQUIRED
+        run: ./gradlew publishAllPublicationsToSonatypeStagingRepository -PGPG_SIGNING_REQUIRED --no-configuration-cache

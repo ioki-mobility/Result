@@ -7,21 +7,28 @@ plugins {
 
 repositories {
     mavenCentral()
-    google()
 }
 
 kotlin {
     explicitApi()
     jvmToolchain(17)
-}
 
-java {
-    withSourcesJar()
-}
+    applyDefaultHierarchyTemplate()
 
-dependencies {
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.strikt)
+    jvm()
+    iosX64()
+    iosArm64()
+    macosX64()
+    macosArm64()
+
+    sourceSets {
+        val jvmTest by getting {
+             dependencies {
+                implementation(libs.test.junit)
+                implementation(libs.test.strikt)
+             }
+         }
+    }
 }
 
 val dokkaJar = tasks.register<Jar>("dokkaJar") {
@@ -32,13 +39,12 @@ val dokkaJar = tasks.register<Jar>("dokkaJar") {
 
 publishing {
     publications {
-        register<MavenPublication>("release") {
+        withType<MavenPublication> {
             artifact(dokkaJar)
 
             groupId = "com.ioki.result"
-            artifactId = "result"
+            artifactId = artifactId.lowercase()
             version = "0.1.0"
-            from(components["java"])
 
             pom {
                 name.set("Result")
@@ -56,11 +62,10 @@ publishing {
                 }
                 developers {
                     developer {
-                        name.set("Stefan 'StefMa' M.")
-                        email.set("StefMaDev@outlook.com")
-                        url.set("https://StefMa.guru")
+                        id.set("ioki")
+                        name.set("ioki Android Team")
                         organization.set("ioki")
-                        organizationUrl.set("https://ioki.com")
+                        organizationUrl.set("https://www.ioki.com")
                     }
                 }
                 scm {
