@@ -16,7 +16,7 @@ jobs:
     uses: ./.github/workflows/test-lib.yml
 
   publish:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: ci
     steps:
       - name: Checkout
