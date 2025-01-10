@@ -35,3 +35,15 @@ jobs:
         with:
           check_name: Unit Test Report
           report_paths: 'build/test-results/jvmTest/TEST-*.xml'
+
+  compile-supported-targets:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        target: [jvm, iosX64, iosArm64, macosX64, macosArm64, linuxX64, linuxArm64, mingwX64]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile target
+        run: ./gradlew compileKotlin${{ matrix.target }}
