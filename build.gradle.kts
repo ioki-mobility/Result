@@ -47,7 +47,7 @@ publishing {
 
             groupId = "com.ioki.result"
             artifactId = artifactId.lowercase()
-            version = "0.3.0"
+            version = "0.4.0-SNAPSHOT"
 
             pom {
                 name.set("Result")
