@@ -19,4 +19,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Publish to Sonatype Snapshot
-        run: ./gradlew publishAllPublicationsToSonatypeSnapshotRepository -PGPG_SIGNING_REQUIRED --no-configuration-cache
+        run: ./gradlew publishAggregationToCentralSnapshots -PGPG_SIGNING_REQUIRED
