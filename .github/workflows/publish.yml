@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Publish to Sonatype Staging
-        run: ./gradlew publishAllPublicationsToSonatypeStagingRepository moveOssrhStagingToCentralPortal -PGPG_SIGNING_REQUIRED --no-configuration-cache
+        run: ./gradlew publishAggregationToCentralPortal -PGPG_SIGNING_REQUIRED
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

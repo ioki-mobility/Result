@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.dokka)
     `maven-publish`
     signing
+    alias(libs.plugins.nmcp)
 }
 
 repositories {
@@ -46,18 +47,14 @@ val dokkaJar = tasks.register<Jar>("dokkaJar") {
     archiveClassifier.set("javadoc")
 }
 
-val base64EncodedBearerToken = Base64.encode(
-    "${System.getenv("SONATYPE_USER")}:${System.getenv("SONATYPE_PASSWORD")}".toByteArray(),
-)
-
+group = "com.ioki.result"
+version = "0.4.0-SNAPSHOT"
 publishing {
     publications {
         withType<MavenPublication> {
             artifact(dokkaJar)
 
-            groupId = "com.ioki.result"
             artifactId = artifactId.lowercase()
-            version = "0.4.0-SNAPSHOT"
 
             pom {
                 name.set("Result")
@@ -89,25 +86,6 @@ publishing {
             }
         }
     }
-    repositories {
-        maven("https://central.sonatype.com/repository/maven-snapshots/") {
-            name = "SonatypeSnapshot"
-            credentials {
-                username = System.getenv("SONATYPE_USER")
-                password = System.getenv("SONATYPE_PASSWORD")
-            }
-        }
-        maven("ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/") {
-            name = "SonatypeStaging"
-            credentials(HttpHeaderCredentials::class) {
-                name = "Authorization"
-                value = "Bearer $base64EncodedBearerToken"
-            }
-            authentication {
-                create<HttpHeaderAuthentication>("header")
-            }
-        }
-    }
 }
 
 signing {
@@ -127,17 +105,10 @@ tasks.withType<AbstractPublishToMaven>().configureEach {
     mustRunAfter(signingTasks)
 }
 
-tasks.register<Exec>("moveOssrhStagingToCentralPortal") {
-    group = "publishing"
-    description = "Runs after publishAllPublicationsToSonatypeStagingRepository to move the artifacts to the central portal"
-
-    shouldRunAfter("publishAllPublicationsToSonatypeStagingRepository")
-
-    commandLine = listOf(
-        "curl",
-        "-f",
-        "-X", "POST",
-        "-H", "Authorization: Bearer $base64EncodedBearerToken",
-        "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/com.ioki",
-    )
+nmcp {
+    centralPortal {
+        username = providers.systemProperty("SONATYPE_USER")
+        password = providers.systemProperty("SONATYPE_PASSWORD")
+        publishingType = "USER_MANAGED"
+    }
 }
