@@ -81,6 +81,16 @@ publishing {
             }
         }
     }
+
+    repositories {
+        maven("https://central.sonatype.com/repository/maven-snapshots/") {
+            name = "SonatypeSnapshot"
+            credentials {
+                username = System.getenv("SONATYPE_USER")
+                password = System.getenv("SONATYPE_PASSWORD")
+            }
+        }
+    }
 }
 
 signing {
@@ -102,8 +112,8 @@ tasks.withType<AbstractPublishToMaven>().configureEach {
 
 nmcp {
     centralPortal {
-        username = providers.systemProperty("SONATYPE_USER")
-        password = providers.systemProperty("SONATYPE_PASSWORD")
+        username = providers.environmentVariable("SONATYPE_USER")
+        password = providers.environmentVariable("SONATYPE_PASSWORD")
         publishingType = "USER_MANAGED"
     }
 }
