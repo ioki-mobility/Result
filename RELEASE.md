@@ -26,12 +26,12 @@
 
 ### 4. Trigger the Release Action
 
-   - This will kick off a [GitHub action (`release.yml`)](../../actions/workflows/release.yml) to release the library to a [Sonatype](https://s01.oss.sonatype.org/) staging repository. 📤
+   - This will kick off a [GitHub action (`release.yml`)](../../actions/workflows/release.yml) to release the library. 📤
    - The action will also draft a [new release on GitHub](../../releases).
 
 ### 5. Sign in to Sonatype and Close the Staged Repo
 
-   - Head to [Sonatype](https://s01.oss.sonatype.org/) and sign in (credentials are in the Bitwarden Open Source Collection).
+   - Head to [Sonatype](https://central.sonatype.com/publishing) and sign in (credentials are in the Bitwarden Open Source Collection).
    - Search for the staged repo, click **Close**.
    - After it's successfully **Closed**, click **Release** and check "Drop after release".
 
