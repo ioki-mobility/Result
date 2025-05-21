@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.dokka)
     `maven-publish`
     signing
+    alias(libs.plugins.nmcp)
 }
 
 repositories {
@@ -41,14 +42,14 @@ val dokkaJar = tasks.register<Jar>("dokkaJar") {
     archiveClassifier.set("javadoc")
 }
 
+group = "com.ioki.result"
+version = "0.4.0-SNAPSHOT"
 publishing {
     publications {
         withType<MavenPublication> {
             artifact(dokkaJar)
 
-            groupId = "com.ioki.result"
             artifactId = artifactId.lowercase()
-            version = "0.4.0-SNAPSHOT"
 
             pom {
                 name.set("Result")
@@ -80,16 +81,10 @@ publishing {
             }
         }
     }
+
     repositories {
-        maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+        maven("https://central.sonatype.com/repository/maven-snapshots/") {
             name = "SonatypeSnapshot"
-            credentials {
-                username = System.getenv("SONATYPE_USER")
-                password = System.getenv("SONATYPE_PASSWORD")
-            }
-        }
-        maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-            name = "SonatypeStaging"
             credentials {
                 username = System.getenv("SONATYPE_USER")
                 password = System.getenv("SONATYPE_PASSWORD")
@@ -113,4 +108,12 @@ signing {
 tasks.withType<AbstractPublishToMaven>().configureEach {
     val signingTasks = tasks.withType<Sign>()
     mustRunAfter(signingTasks)
+}
+
+nmcp {
+    centralPortal {
+        username = providers.environmentVariable("SONATYPE_USER")
+        password = providers.environmentVariable("SONATYPE_PASSWORD")
+        publishingType = "USER_MANAGED"
+    }
 }
