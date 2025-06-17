@@ -6,6 +6,7 @@ import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 import strikt.assertions.isNull
+import strikt.assertions.isTrue
 
 class ResultExtTest {
     @Test
@@ -132,6 +133,28 @@ class ResultExtTest {
 
         expectThat(data)
             .isNull()
+    }
+
+    @Test
+    fun `doOnSuccess executed lambda on success`() {
+        var lambdaCalled = false
+
+        succeedingAction("Hurray!")
+            .doOnSuccess { lambdaCalled = true }
+
+        expectThat(lambdaCalled)
+            .isTrue()
+    }
+
+    @Test
+    fun `doOnFailure executed lambda on failure`() {
+        var lambdaCalled = false
+
+        failingAction(Error.IO)
+            .doOnFailure { lambdaCalled = true }
+
+        expectThat(lambdaCalled)
+            .isTrue()
     }
 }
 
