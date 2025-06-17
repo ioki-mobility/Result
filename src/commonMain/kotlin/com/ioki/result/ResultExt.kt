@@ -53,6 +53,11 @@ public inline fun <T, E> Result<T, E>.doOnSuccess(block: (T) -> Unit): Result<T,
     is Result.Success -> this.also { block(it.data) }
 }
 
+public inline fun <T, E> Result<T, E>.doOnFailure(block: (E) -> Unit): Result<T, E> = when (this) {
+    is Result.Failure -> this.also { block(it.error) }
+    is Result.Success -> this
+}
+
 public fun <A, B, C, E> Result<A, E>.zipWith(other: Result<B, E>, zipper: (A, B) -> C): Result<C, E> {
     return this.flatMap { a ->
         other.map { b ->
