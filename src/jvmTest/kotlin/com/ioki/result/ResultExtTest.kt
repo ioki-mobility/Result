@@ -156,6 +156,39 @@ class ResultExtTest {
         expectThat(lambdaCalled)
             .isTrue()
     }
+
+    @Test
+    fun `zipWith returns first failure`() {
+        val result = failingAction("Error")
+            .zipWith(succeedingAction("Works")) { a, b -> "$a & $b" }
+
+        expectThat(result)
+            .isA<Result.Failure<String>>()
+            .get { error }
+            .isEqualTo("Error")
+    }
+
+    @Test
+    fun `zipWith returns second failure`() {
+        val result = succeedingAction("Works")
+            .zipWith(failingAction("Failure")) { a, b -> "$a & $b" }
+
+        expectThat(result)
+            .isA<Result.Failure<String>>()
+            .get { error }
+            .isEqualTo("Failure")
+    }
+
+    @Test
+    fun `zipWith returns zipper`() {
+        val result = succeedingAction("Works")
+            .zipWith(succeedingAction("Nicely")) { a, b -> "$a $b" }
+
+        expectThat(result)
+            .isA<Result.Success<String>>()
+            .get { data }
+            .isEqualTo("Works Nicely")
+    }
 }
 
 private fun succeedingAction(result: String): Result<String, String> {
