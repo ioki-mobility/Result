@@ -43,6 +43,75 @@ class ResultTest {
             .get { error }
             .assert("error is a IllegalArgumentException") { it is IllegalArgumentException }
     }
+
+    @Test
+    fun `zip() with two Results return zipper`() {
+        val result = Result.zip(
+            succeedingAction("Success"),
+            succeedingAction("Again Success"),
+        ) { a, b -> "$a & $b" }
+
+        expectThat(result)
+            .isA<Result.Success<String>>()
+            .get { data }
+            .isEqualTo("Success & Again Success")
+    }
+
+    @Test
+    fun `zip() with three Results return zipper`() {
+        val result = Result.zip(
+            succeedingAction("Success"),
+            succeedingAction("Again Success"),
+            succeedingAction("And Again Success"),
+        ) { a, b, c -> "$a & $b & $c" }
+
+        expectThat(result)
+            .isA<Result.Success<String>>()
+            .get { data }
+            .isEqualTo("Success & Again Success & And Again Success")
+    }
+
+    @Test
+    fun `zip() with three Results return first failure`() {
+        val result = Result.zip(
+            failingAction("Failure"),
+            succeedingAction("Again Success"),
+            succeedingAction("And Again Success"),
+        ) { a, b, c -> "$a & $b & $c" }
+
+        expectThat(result)
+            .isA<Result.Failure<String>>()
+            .get { error }
+            .isEqualTo("Failure")
+    }
+
+    @Test
+    fun `zip() with three Results return second failure`() {
+        val result = Result.zip(
+            succeedingAction("Success"),
+            failingAction("Failure"),
+            succeedingAction("And Again Success"),
+        ) { a, b, c -> "$a & $b & $c" }
+
+        expectThat(result)
+            .isA<Result.Failure<String>>()
+            .get { error }
+            .isEqualTo("Failure")
+    }
+
+    @Test
+    fun `zip() with three Results return third failure`() {
+        val result = Result.zip(
+            succeedingAction("Success"),
+            succeedingAction("Again Success"),
+            failingAction("Failure"),
+        ) { a, b, c -> "$a & $b & $c" }
+
+        expectThat(result)
+            .isA<Result.Failure<String>>()
+            .get { error }
+            .isEqualTo("Failure")
+    }
 }
 
 private fun succeedingAction(result: String): Result<String, String> {
