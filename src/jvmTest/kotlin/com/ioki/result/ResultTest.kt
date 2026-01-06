@@ -58,6 +58,19 @@ class ResultTest {
     }
 
     @Test
+    fun `zip() with two Results failing return first failure`() {
+        val result = Result.zip(
+            failingAction("Failure1"),
+            failingAction("Failure2"),
+        ) { a, b -> "$a & $b" }
+
+        expectThat(result)
+            .isA<Result.Failure<String>>()
+            .get { error }
+            .isEqualTo("Failure1")
+    }
+
+    @Test
     fun `zip() with three Results return zipper`() {
         val result = Result.zip(
             succeedingAction("Success"),
@@ -111,6 +124,20 @@ class ResultTest {
             .isA<Result.Failure<String>>()
             .get { error }
             .isEqualTo("Failure")
+    }
+
+    @Test
+    fun `zip() with three Results failing return first failure`() {
+        val result = Result.zip(
+            failingAction("Failure1"),
+            failingAction("Failure2"),
+            failingAction("Failure3"),
+        ) { a, b, c -> "$a & $b & $c" }
+
+        expectThat(result)
+            .isA<Result.Failure<String>>()
+            .get { error }
+            .isEqualTo("Failure1")
     }
 }
 
