@@ -21,11 +21,11 @@ public sealed interface Result<out T, out E> {
             }
         }
 
-        public fun <A, B, C, D> zip(
-            first: Result<A, C>,
-            second: Result<B, C>,
-            zipper: (A, B) -> D,
-        ): Result<D, C> = first.zipWith(other = second, zipper = zipper)
+        public fun <A, B, C, E> zip(
+            first: Result<A, E>,
+            second: Result<B, E>,
+            zipper: (A, B) -> C,
+        ): Result<C, E> = first.zipWith(other = second, zipper = zipper)
 
         public fun <A, B, C, D, E> zip(
             first: Result<A, E>,
